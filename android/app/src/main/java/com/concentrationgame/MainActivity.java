@@ -1,6 +1,7 @@
 package com.concentrationgame;
 
 import com.facebook.react.ReactActivity;
+import com.facebook.FacebookSdk;
 
 public class MainActivity extends ReactActivity {
 
@@ -11,5 +12,11 @@ public class MainActivity extends ReactActivity {
     @Override
     protected String getMainComponentName() {
         return "ConcentrationGame";
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        MainApplication.getCallbackManager().onActivityResult(requestCode, resultCode, data);
     }
 }
