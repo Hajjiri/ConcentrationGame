@@ -10,8 +10,14 @@
 		"test": "jest"	
   },
   "dependencies": {
-    "react": "16.0.0-alpha.12",
-    "react-native": "0.47.0"
+    "autobind-decorator": "^2.1.0",		
+		"prop-types": "^15.5.10",
+		"react": "16.0.0-alpha.12",		
+    "react-native": "0.46.1",
+    "react-redux": "^5.0.5",		
+		"redux": "^3.7.1",
+    "redux-logger": "^3.0.6",
+    "react-navigation": "^1.0.0-beta.11"
   },
   "devDependencies": {
     "@types/react": "*",

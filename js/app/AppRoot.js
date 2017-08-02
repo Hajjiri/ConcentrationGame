@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { Provider } from 'react-redux';
+import AppWithNavigationState from './App'
+import store from './store'
 
 export default class ApplicationRoot extends Component {
     render() {
         return (
-            <View>
-                <Text> hello </Text>
-            </View>
+            <Provider store={store}>
+                <AppWithNavigationState />
+            </Provider>
         );
     }
 }
