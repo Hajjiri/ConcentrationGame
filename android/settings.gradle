@@ -1,0 +1,3 @@
+rootProject.name = 'ConcentrationGame'
+
+include ':app'
