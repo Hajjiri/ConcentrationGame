@@ -1,7 +1,8 @@
 package com.concentrationgame;
 
 import com.facebook.react.ReactActivity;
-import com.facebook.FacebookSdk;
+
+import android.content.Intent;
 
 public class MainActivity extends ReactActivity {
 
