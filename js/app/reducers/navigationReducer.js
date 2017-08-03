@@ -2,7 +2,7 @@ import { BackAndroid } from 'react-native';
 import AppNavigator from '@app_init/AppNavigator';
 
 const initialState = AppNavigator.router.getStateForAction(
-  AppNavigator.router.getActionForPathAndParams('HomePage')
+  AppNavigator.router.getActionForPathAndParams('LoginPage')
 );
 
 export default function reducer(state = initialState, action)

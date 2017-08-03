@@ -2,27 +2,26 @@ import React, { Component } from 'react';
 import { LoginButton, AccessToken } from 'react-native-fbsdk';
 import PropTypes from 'prop-types';
 
-export default class FBLogin extends Component {  
+export default class FBLogin extends Component {
   render() {
     return (
-      <LoginButton        
+      <LoginButton
         onLoginFinished={
           (error, result) => {
             if (error) {
               this.props.OnLoginFailed(result.error);
-            } else if (result.isCancelled) {              
+            } else if (result.isCancelled) {
               this.props.OnLoginCanceled();
             } else {
               AccessToken.getCurrentAccessToken().then(
                 (data) => {
-                  this.props.OnLoginSucceed(data.accessToken.toString());
+                  this.props.OnLoginSucceed(data);                  
                 }
-              )
+              )              
             }
           }
         }
-        onLogoutFinished={() => this.props.onLogout()} />
-      //TODO: handle logout error, and result cases if possible?
+        onLogoutFinished={() => this.props.onLogout()} />      
     );
   }
 }
