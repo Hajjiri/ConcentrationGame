@@ -5,8 +5,7 @@ import PropTypes from 'prop-types';
 export default class FBLogin extends Component {  
   render() {
     return (
-      <LoginButton
-        publishPermissions={["publish_actions"]}
+      <LoginButton        
         onLoginFinished={
           (error, result) => {
             if (error) {
