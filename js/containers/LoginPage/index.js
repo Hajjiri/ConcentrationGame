@@ -16,7 +16,7 @@ export default class LoginPage extends Component {
         var token = fbResponseData.accessToken.toString();
         var user = fbResponseData.userID.toString();
         Toastr.makeToast("Logged in successfully.");
-        this.props.navigation.navigate('HomePage', {
+        resetStack(this.props.navigation, "HomePage", {
             user: {
                 userId: user,
                 userAccessToken: token
