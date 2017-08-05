@@ -10,7 +10,7 @@ const AppNavigator = StackNavigator(Routes, {
   navigationOptions: {
     headerBackTitle: null,
     headerStyle: {
-      backgroundColor: 'purple'
+      backgroundColor: '#732C7B'
     },
     headerTitleStyle: {
       fontFamily: 'Cochin',

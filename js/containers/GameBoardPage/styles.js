@@ -6,18 +6,14 @@ export default StyleSheet.create({
         margin: 10,
         backgroundColor: 'white',
         flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',        
         borderWidth: 3,
         borderColor: '#9C8AA5'
-    },
-    content: {
-        alignItems: 'center'
     },
     header: {
         textAlign: 'center',
         margin: 10,
         color: '#9C8AA5'
-    },
-    scroll_view_content: {
-        justifyContent: 'center'
     }
 });

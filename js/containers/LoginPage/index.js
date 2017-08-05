@@ -1,26 +1,48 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import autobind from 'autobind-decorator';
+import _ from 'lodash';
 import FBLogin from '@components/FBLogin'
 import { Toastr } from '@components/Toastr';
 import { resetStack } from '@app_init/NavigationActionsMethods';
 
+import * as authenticationActions from '@actions/authenticationActions';
+const mapDispatchToProps = dispatch => ({
+    authenticationActions: bindActionCreators(authenticationActions, dispatch)
+});
+const mapStateToProps = store => ({
+    authenticationStore: store.authenticationStore
+});
+@connect(mapStateToProps, mapDispatchToProps)
 export default class LoginPage extends Component {
     static navigationOptions = ({ navigation, screenProps }) => ({
         title: 'Join our community of best players online today!'
     });
 
+    componentWillMount() {
+        let user = this.props.authenticationStore.user;        
+        if (!_.isEmpty(user)) {
+            resetStack(this.props.navigation, "HomePage", {
+                user: user
+            });
+        }
+    }
+
     @autobind
     OnLoginSucceed(fbResponseData) {
-        var token = fbResponseData.accessToken.toString();
-        var user = fbResponseData.userID.toString();
+        const token = fbResponseData.accessToken.toString();
+        const userId = fbResponseData.userID.toString();
+        const user = {
+            userId: userId,
+            userAccessToken: token
+        }
+        this.props.authenticationActions.persistUserState(user);
         Toastr.makeToast("Logged in successfully.");
         resetStack(this.props.navigation, "HomePage", {
-            user: {
-                userId: user,
-                userAccessToken: token
-            }
+            user
         });
     }
     @autobind
@@ -29,11 +51,12 @@ export default class LoginPage extends Component {
     }
     @autobind
     OnLoginCanceled() {
-        Toastr.makeToast("Have you cancelled the login process?");
+        Toastr.makeToast("Have you cancelled the login process!");
     }
     @autobind
     onLogout() {
-        Toastr.makeToast("Logged out successfully.");
+        this.props.authenticationActions.dropUserState();        
+        Toastr.makeToast("Logged out successfully.");        
         resetStack(this.props.navigation, "LoginPage");
     }
 
