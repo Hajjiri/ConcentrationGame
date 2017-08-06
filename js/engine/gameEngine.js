@@ -1,44 +1,28 @@
-class myClass {
+import { EasyLevelSettings, HardLevelSettings } from '@accessors/settings';
+import GameNode from './node';
 
+class GameEngine {
     static tempValuesGenerator() {
-        const easyDifficulty = {
-            sideSize: 2,
-            repetition: 2,
-            cells: {
-                images: [
-                    'https://dummyimage.com/60x60/613c61/cccdd9.png&text=1',
-                    'https://dummyimage.com/60x60/807780/cccdd9.png&text=2'
-                ]
-            }
-        }
-        const hardDifficulty = {
-            sideSize: 8,
-            repetition: 2,
-            cells: {
-                images: [
-                    'https://dummyimage.com/60x60/613c61/cccdd9.png&text=1',
-                    'https://dummyimage.com/60x60/807780/cccdd9.png&text=2',
-                    'https://dummyimage.com/60x60/262326/cccdd9.png&text=3',
-                    'https://dummyimage.com/60x60/150042/cccdd9.png&text=4',
-                    'https://dummyimage.com/60x60/820e1c/cccdd9.png&text=5',
-                    'https://dummyimage.com/60x60/0994f0/cccdd9.png&text=6',
-                    'https://dummyimage.com/60x60/0c9e7c/cccdd9.png&text=7',
-                    'https://dummyimage.com/60x60/d99503/cccdd9.png&text=8'
-                ]
-            }
-        }
-        let game = this.startNewGame(easyDifficulty);
+        let game = this.determineDifficulty("easy");
         return game;
     }
 
-    static startNewGame(difficulty) {
-        let images = difficulty.cells.images;
-        let repetition = difficulty.repetition;
-        shuffledImages = this.prepareArray(images, repetition);
+    static determineDifficulty(difficulty) {
+        if (difficulty === EasyLevelSettings.getLevelName()) {
+            return startNewGame(EasyLevelSettings);
+        }
+        else {
+            return startNewGame(HardLevelSettings);
+        }
+    }
+    static startNewGame(LevelBasedSettings) {
+        let repetition = LevelBasedSettings.getRepetitionNumber();
+        let images = LevelBasedSettings.getImages();
 
-
+        let shuffledImages = this.prepareArray(images, repetition);
+        let nodes = convertArrayToNodes(shuffledImages);
         let game = {
-            array: shuffledImages,
+            nodes: nodes,
             score: 0
         }
         return game;
@@ -72,10 +56,12 @@ class myClass {
         }
         return array;
     }
+    convertArrayToNodes(array) {
+        let nodes = [];
+        array.forEach(function (element) {
+            nodes.push(new GameNode(element));
+        });
+        return nodes;
+    }
 }
-
-
-
-
-//console.log(myClass.tempValuesGenerator());
 
