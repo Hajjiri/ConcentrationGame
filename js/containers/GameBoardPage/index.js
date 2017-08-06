@@ -1,21 +1,20 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
-
-// import autobind from 'autobind-decorator';
-// import { Toastr } from '@components/Toastr'0;
-// import Button from '@components/Button';
+import GameEngine from '@game_engine/gameEngine';
+import Board from '@components/Board';
 
 export default class GameBoardPage extends Component {
     static navigationOptions = ({ navigation, screenProps }) => ({
         title: 'Concentration game challenges you!'
     });
-    
-    
-    //this.props.navigation.state.params.user.userId
+
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.header}>A fine game should be here</Text>               
+                <Text style={styles.header}>Press on "start" to rock and roll</Text>
+                <View>
+                    <Board getGameObj={GameEngine.tempValuesGenerator()} />
+                </View>
             </View>
         );
     }

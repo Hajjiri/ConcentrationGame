@@ -1,7 +1,7 @@
 import { EasyLevelSettings, HardLevelSettings } from '@accessors/settings';
 import GameNode from './node';
 
-class GameEngine {
+export default class GameEngine {
     static tempValuesGenerator() {
         let game = this.determineDifficulty("easy");
         return game;
@@ -9,10 +9,10 @@ class GameEngine {
 
     static determineDifficulty(difficulty) {
         if (difficulty === EasyLevelSettings.getLevelName()) {
-            return startNewGame(EasyLevelSettings);
+            return this.startNewGame(EasyLevelSettings);
         }
         else {
-            return startNewGame(HardLevelSettings);
+            return this.startNewGame(HardLevelSettings);
         }
     }
     static startNewGame(LevelBasedSettings) {
@@ -20,7 +20,7 @@ class GameEngine {
         let images = LevelBasedSettings.getImages();
 
         let shuffledImages = this.prepareArray(images, repetition);
-        let nodes = convertArrayToNodes(shuffledImages);
+        let nodes = this.convertArrayToNodes(shuffledImages);
         let game = {
             nodes: nodes,
             score: 0
@@ -56,7 +56,7 @@ class GameEngine {
         }
         return array;
     }
-    convertArrayToNodes(array) {
+    static convertArrayToNodes(array) {
         let nodes = [];
         array.forEach(function (element) {
             nodes.push(new GameNode(element));
