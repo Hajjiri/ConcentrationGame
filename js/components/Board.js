@@ -1,24 +1,23 @@
-import React, { Component } from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import { View, TouchableOpacity } from "react-native";
+import PropTypes from "prop-types";
+
+import ImageGrid from "./ImageGrid";
 
 class Board extends Component {
-    render() {
-        return (
-            <TouchableOpacity onPress={this.props.onPress}>
-                <View>
-                    <Text>
-                        Game board wanna be!
-                        {console.log(this.props.getGameObj)}
-                    </Text>
-                </View>
-            </TouchableOpacity>
-        );
-    }
+  render() {
+    return (
+      <ImageGrid
+        nodes={this.props.getGameObj.nodes}
+        rowSize={this.props.difficulty === "easy" ? 2 : 4}
+      />
+    );
+  }
 }
 
 Board.propTypes = {
-    getGameObj: PropTypes.object.isRequired
+  getGameObj: PropTypes.object.isRequired,
+  difficulty: PropTypes.string
 };
 
 export default Board;
