@@ -16,8 +16,5 @@ export default StyleSheet.create({
         textAlign: 'center',
         margin: 10,
         color: '#9C8AA5'
-    },
-    scroll_view_content: {
-        justifyContent: 'center'
     }
 });
