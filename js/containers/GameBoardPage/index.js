@@ -20,16 +20,15 @@ export default class GameBoardPage extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.content}>
-          <Text>Press on "start" to rock and roll</Text>
           <Button button_text={"Start"} onPress={this.startGame} />
         </View>
 
-        <View style={styles.board}>
+        <ScrollView>
           <Board
             gameObj={GameEngine.determineDifficulty("hard")}
             difficulty={"hard"}
           />
-        </View>
+        </ScrollView>
       </View>
     );
   }

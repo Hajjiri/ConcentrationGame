@@ -1,4 +1,9 @@
 const settings = {
+  defaults: {
+    thumbnail: {
+      uri: "https://dummyimage.com/60x60/6b616b.png&text=+"
+    }
+  },
   easyDifficulty: {
     sideSize: 2,
     repetition: 2,

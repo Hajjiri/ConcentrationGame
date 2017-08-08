@@ -12,7 +12,6 @@ export default StyleSheet.create({
   content: {
     alignItems: "center"
   },
-  board: {},
   header: {
     textAlign: "center",
     margin: 10,
