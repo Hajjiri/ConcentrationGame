@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, ScrollView } from "react-native";
+import autobind from "autobind-decorator";
 
 import GameEngine from "@game_engine/gameEngine";
 import Board from "@components/Board";
@@ -9,6 +10,11 @@ export default class GameBoardPage extends Component {
   static navigationOptions = ({ navigation, screenProps }) => ({
     title: "Concentration game challenges you!"
   });
+
+  @autobind
+  startGame() {
+    console.log("started");
+  }
 
   render() {
     return (
@@ -20,7 +26,7 @@ export default class GameBoardPage extends Component {
 
         <View style={styles.board}>
           <Board
-            getGameObj={GameEngine.determineDifficulty("hard")}
+            gameObj={GameEngine.determineDifficulty("hard")}
             difficulty={"hard"}
           />
         </View>

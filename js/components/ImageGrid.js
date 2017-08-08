@@ -1,33 +1,32 @@
 import React, { Component } from "react";
 import { View, Image, ScrollView } from "react-native";
-import PropTypes from "prop-types";
 
+import PropTypes from "prop-types";
 import _ from "lodash";
+import autobind from 'autobind-decorator';
+import Cell from "./Cell";
 
 export default class ImageGrid extends Component {
+  
+  @autobind
+  onCellSelected() {
+    console.log("clicked");    
+  }
   renderRow(images) {
     return (
       <View
         style={{
-          justifyContent: "space-between",
           flex: 1,
           flexDirection: "row"
         }}
       >
-        {images.map(function(item, j) {
+        {images.map(function(item, j) {          
           return (
             <View key={j}>
-              <Image
-                style={{
-                  width: 60,
-                  height: 60,                  
-                  marginHorizontal: 1
-                }}
-                source={item.imageUrl}
-              />
+              <Cell item={item} onPress={this.onCellSelected} />
             </View>
           );
-        })}
+        }, this)}
       </View>
     );
   }
@@ -37,13 +36,13 @@ export default class ImageGrid extends Component {
       <View
         style={{
           flex: 1,
-          justifyContent: "space-between",
-          flexDirection: "column"
+          flexDirection: "column",
+          alignItems: "center"
         }}
       >
         {_.chunk(this.props.nodes, rowSize).map((rowImages, i) => {
           return (
-            <View style={{ width: 60, height: 60, marginVertical: 1 }} key={i}>
+            <View style={{ height: 60, marginVertical: 1 }} key={i}>
               {this.renderRow(rowImages)}
             </View>
           );
@@ -53,7 +52,7 @@ export default class ImageGrid extends Component {
   }
 
   render() {
-    console.log(this.props.getGameObj);
+    console.log(this.props.nodes);
     return this.renderImages(this.props.rowSize);
   }
 }

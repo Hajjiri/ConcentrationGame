@@ -8,7 +8,7 @@ class Board extends Component {
   render() {
     return (
       <ImageGrid
-        nodes={this.props.getGameObj.nodes}
+        nodes={this.props.gameObj.nodes}
         rowSize={this.props.difficulty === "easy" ? 2 : 4}
       />
     );
@@ -16,7 +16,7 @@ class Board extends Component {
 }
 
 Board.propTypes = {
-  getGameObj: PropTypes.object.isRequired,
+  gameObj: PropTypes.object.isRequired,
   difficulty: PropTypes.string
 };
 
