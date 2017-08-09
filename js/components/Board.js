@@ -3,6 +3,7 @@ import { View, TouchableOpacity } from "react-native";
 import PropTypes from "prop-types";
 import autobind from "autobind-decorator";
 
+import GameEngine from "@game_engine/gameEngine";
 import ImageGrid from "./ImageGrid";
 
 class Board extends Component {
@@ -13,11 +14,14 @@ class Board extends Component {
     };
   }
 
+  updateBoardUI() {
+    this.setState({});
+  }
+
   @autobind
   onCellSelected(cell) {
-    let { nodes } = this.state;
-    cell.flipNode();
-    this.setState({});
+    GameEngine.selectedNode(cell, this.state.nodes);    
+    this.updateBoardUI();
   }
 
   render() {

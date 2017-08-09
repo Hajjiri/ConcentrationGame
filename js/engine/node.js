@@ -25,7 +25,13 @@ export default class GameNode {
     return this.tail === false;
   }
   flipNode() {
-    this.tail = !this.tail;    
+    this.tail = !this.tail;
+  }
+  tailNode() {
+    this.tail = true;
+  }
+  unTailNode() {
+    this.tail = false;
   }
   isBurnt() {
     return this.burnt === true;

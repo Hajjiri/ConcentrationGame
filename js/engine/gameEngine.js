@@ -2,6 +2,7 @@ import { EasyLevelSettings, HardLevelSettings } from "@accessors/settings";
 import GameNode from "./node";
 
 export default class GameEngine {
+  // games assets initializing
   static determineDifficulty(difficulty) {
     if (difficulty === EasyLevelSettings.getLevelName()) {
       return this.startNewGame(EasyLevelSettings);
@@ -61,5 +62,57 @@ export default class GameEngine {
       nodes.push(new GameNode(element));
     });
     return nodes;
+  }
+  // games logic
+  static selectedNode(node, nodes) {
+    if (!node.isBurnt() && !node.isHalted()) {
+      if (this.checkFirstRoll(nodes)) {
+        this.unTailNode(node);
+      } else {
+        this.unTailNode(node);
+        this.checkMatchingNodes(node, nodes);
+      }
+    }
+  }
+  static checkFirstRoll(nodes) {
+    headNodes = nodes.filter(function(node) {
+      return node.isHead() && !node.isBurnt();
+    });
+    return headNodes.length == 0;
+  }
+  static checkMatchingNodes(selectedNode, nodes) {
+    var matchedNodes = nodes.filter(node => {
+      return (
+        !node.isBurnt() && //not played yet
+        node.getImageUrl() === selectedNode.getImageUrl() && //identical
+        node.isHead() // revealed
+      );
+    });    
+    if (matchedNodes.length === 2) {
+      // mark those identical as played and burned
+      for (var i = 0; i < nodes.length; i++) {
+        if (nodes[i].getImageUrl() === selectedNode.getImageUrl()) {       
+          this.burnNode(nodes[i]);
+        }
+      }
+    } else {
+      // unreveal those un identical
+      for (var i = 0; i < nodes.length; i++) {
+        if (!nodes[i].isBurnt() && nodes[i].isHead()) {          
+          this.tailNode(nodes[i]);
+        }
+      }
+    }
+  }
+  static unTailNode(node) {
+    node.unTailNode();
+  }
+  static tailNode(node) {
+    // setTimeout(() => {
+      node.tailNode();
+    // }, 500);
+  }
+  static burnNode(node) {
+    node.burnNode();
   }
 }
