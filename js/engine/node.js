@@ -1,7 +1,7 @@
 export default class GameNode {
   constructor(imageUrl) {
     this.imageUrl = imageUrl;
-    this.halted = false; // blocked until timer starts
+    this.halted = true; // blocked until timer starts
     this.tail = true; // head or tail
     this.burnt = false; // already matched
   }

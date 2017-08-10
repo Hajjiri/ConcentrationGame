@@ -16,8 +16,7 @@ export default class GameEngine {
     let shuffledImages = this.prepareArray(images, repetition);
     let nodes = this.convertArrayToNodes(shuffledImages);
     let game = {
-      nodes: nodes,
-      score: 0
+      nodes: nodes
     };
     return game;
   }
