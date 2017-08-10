@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import { View, TouchableOpacity, Text, ScrollView } from "react-native";
 import autobind from "autobind-decorator";
 const timer = require("react-native-timer");
-
+import _ from "lodash";
 import GameEngine from "@game_engine/gameEngine";
 import Button from "@components/Button";
 import { Toastr } from "@components/Toastr";
 import ImageGrid from "@components/ImageGrid";
+import moment from "moment";
 
 export default class GameBoardPage extends Component {
   static navigationOptions = ({ navigation, screenProps }) => ({
@@ -17,7 +18,8 @@ export default class GameBoardPage extends Component {
     this.state = {
       nodes: [],
       difficulty: "hard",
-      started: false
+      started: false,
+      startedAt: null
     };
   }
 
@@ -49,7 +51,7 @@ export default class GameBoardPage extends Component {
               GameEngine.selectedNode(cell, this.state.nodes);
               this.updateBoardUI();
               if (GameEngine.checkGameEnd(this.state.nodes)) {
-                Toastr.makeToast("Wow. You really did it! Congratulation..");
+                this.endGame();
               }
             },
             700
@@ -65,15 +67,41 @@ export default class GameBoardPage extends Component {
   @autobind
   startGame() {
     if (!this.state.started) {
-      GameEngine.unBlockNodes(this.state.nodes);
-      this.setState({ started: true });
+      this.initateGame();
     } else {
-      this.setState({
-        started: false,
-        nodes: GameEngine.determineDifficulty(this.state.difficulty).nodes
-      });
-      this.updateBoardUI();
+      this.restartGame();
     }
+  }
+
+  endGame() {
+    let secondsPassed = this.calculateScore(moment(new Date()));
+    if (secondsPassed != null) {
+      Toastr.makeToast("Wow. You did it in: " + secondsPassed + "!");
+    } else {
+      Toastr.makeToast("Wow. You really did it! Congratulation..");
+    }
+  }
+  initateGame() {
+    GameEngine.unBlockNodes(this.state.nodes);
+    this.setState({
+      started: true,
+      startedAt: moment(new Date())
+    });
+  }
+  restartGame() {
+    this.setState({
+      started: false,
+      startedAt: null,
+      nodes: GameEngine.determineDifficulty(this.state.difficulty).nodes
+    });
+  }
+  calculateScore(endStamp) {
+    if (!_.isEmpty(this.state.startedAt) && !_.isEmpty(endStamp)) {
+      let gameDuration = moment.duration(endStamp.diff(this.state.startedAt));
+      let secondsPassed = gameDuration.as("seconds");
+      return secondsPassed;
+    }
+    return null;
   }
 
   render() {
