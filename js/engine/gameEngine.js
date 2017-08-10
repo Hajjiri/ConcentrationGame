@@ -64,21 +64,34 @@ export default class GameEngine {
     return nodes;
   }
   // games logic
+  static checkAvailability(nodes) {
+    revealedNodes = nodes.filter(function(node) {
+      return node.isHead() && !node.isBurnt();
+    });
+    // we dont want more than two cards to be revealed in the same time, or do we?
+    return revealedNodes.length < 2;
+  }
+  static blockNodes(nodes) {
+    nodes.forEach(node => {
+      node.block();
+    });
+  }
+  static unBlockNodes(nodes) {
+    nodes.forEach(node => {
+      node.unBlock();
+    });
+  }
   static selectedNode(node, nodes) {
-    if (!node.isBurnt() && !node.isHalted()) {
-      if (this.checkFirstRoll(nodes)) {
-        this.unTailNode(node);
-      } else {
-        this.unTailNode(node);
-        this.checkMatchingNodes(node, nodes);
-      }
+    if (!this.checkFirstRoll(nodes)) {
+      node.unTail();
+      this.checkMatchingNodes(node, nodes);
     }
   }
   static checkFirstRoll(nodes) {
     headNodes = nodes.filter(function(node) {
       return node.isHead() && !node.isBurnt();
     });
-    return headNodes.length == 0;
+    return headNodes.length == 1; // assuming first roll is only one card played
   }
   static checkMatchingNodes(selectedNode, nodes) {
     var matchedNodes = nodes.filter(node => {
@@ -87,32 +100,21 @@ export default class GameEngine {
         node.getImageUrl() === selectedNode.getImageUrl() && //identical
         node.isHead() // revealed
       );
-    });    
+    });
     if (matchedNodes.length === 2) {
       // mark those identical as played and burned
       for (var i = 0; i < nodes.length; i++) {
-        if (nodes[i].getImageUrl() === selectedNode.getImageUrl()) {       
-          this.burnNode(nodes[i]);
+        if (nodes[i].getImageUrl() === selectedNode.getImageUrl()) {
+          nodes[i].burn();
         }
       }
     } else {
       // unreveal those un identical
       for (var i = 0; i < nodes.length; i++) {
-        if (!nodes[i].isBurnt() && nodes[i].isHead()) {          
-          this.tailNode(nodes[i]);
+        if (!nodes[i].isBurnt() && nodes[i].isHead()) {
+          nodes[i].tailNode();
         }
       }
     }
-  }
-  static unTailNode(node) {
-    node.unTailNode();
-  }
-  static tailNode(node) {
-    // setTimeout(() => {
-      node.tailNode();
-    // }, 500);
-  }
-  static burnNode(node) {
-    node.burnNode();
   }
 }

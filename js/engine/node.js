@@ -15,7 +15,10 @@ export default class GameNode {
   isHalted() {
     return this.halted === true;
   }
-  unBlockNode() {
+  block() {
+    this.halted = true;
+  }
+  unBlock() {
     this.halted = false;
   }
   isTail() {
@@ -27,16 +30,16 @@ export default class GameNode {
   flipNode() {
     this.tail = !this.tail;
   }
-  tailNode() {
+  tailNode() {    
     this.tail = true;
   }
-  unTailNode() {
+  unTail() {
     this.tail = false;
   }
   isBurnt() {
     return this.burnt === true;
   }
-  burnNode() {
+  burn() {
     this.burnt = true;
   }
 }

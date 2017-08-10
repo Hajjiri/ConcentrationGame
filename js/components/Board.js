@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { View, TouchableOpacity } from "react-native";
 import PropTypes from "prop-types";
 import autobind from "autobind-decorator";
-
+const timer = require("react-native-timer");
 import GameEngine from "@game_engine/gameEngine";
 import ImageGrid from "./ImageGrid";
 
@@ -13,6 +13,9 @@ class Board extends Component {
       nodes: props.gameObj.nodes
     };
   }
+  componentWillUnmount() {
+    timer.clearTimeout(this);
+  }
 
   updateBoardUI() {
     this.setState({});
@@ -20,8 +23,23 @@ class Board extends Component {
 
   @autobind
   onCellSelected(cell) {
-    GameEngine.selectedNode(cell, this.state.nodes);    
-    this.updateBoardUI();
+    if (!cell.isBurnt() && !cell.isHalted()) {
+      if (GameEngine.checkAvailability(this.state.nodes)) {
+        // if only one card is revealed the move is available, else, blocked
+        cell.unTail();
+        this.updateBoardUI();
+
+        timer.setTimeout(
+          this,
+          "updateSuccess",
+          () => {
+            GameEngine.selectedNode(cell, this.state.nodes);
+            this.updateBoardUI();
+          },
+          50
+        );
+      }
+    }
   }
 
   render() {
