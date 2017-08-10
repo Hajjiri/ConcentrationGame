@@ -64,8 +64,17 @@ export default class GameEngine {
     return nodes;
   }
   // games logic
+  static checkGameEnd(nodes) {
+    let availableMoves = nodes.filter(node => {
+      return !node.isBurnt();
+    });    
+    if (availableMoves.length > 0) {
+      return false;
+    }
+    return true;
+  }
   static checkAvailability(nodes) {
-    revealedNodes = nodes.filter(function(node) {
+    let revealedNodes = nodes.filter(node => {
       return node.isHead() && !node.isBurnt();
     });
     // we dont want more than two cards to be revealed in the same time, or do we?
@@ -88,13 +97,13 @@ export default class GameEngine {
     }
   }
   static checkFirstRoll(nodes) {
-    headNodes = nodes.filter(function(node) {
+    let headNodes = nodes.filter(function(node) {
       return node.isHead() && !node.isBurnt();
     });
     return headNodes.length == 1; // assuming first roll is only one card played
   }
   static checkMatchingNodes(selectedNode, nodes) {
-    var matchedNodes = nodes.filter(node => {
+    let matchedNodes = nodes.filter(node => {
       return (
         !node.isBurnt() && //not played yet
         node.getImageUrl() === selectedNode.getImageUrl() && //identical

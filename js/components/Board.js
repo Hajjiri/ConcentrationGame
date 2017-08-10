@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import autobind from "autobind-decorator";
 const timer = require("react-native-timer");
 import GameEngine from "@game_engine/gameEngine";
+import { Toastr } from "@components/Toastr";
 import ImageGrid from "./ImageGrid";
 
 class Board extends Component {
@@ -35,9 +36,14 @@ class Board extends Component {
           () => {
             GameEngine.selectedNode(cell, this.state.nodes);
             this.updateBoardUI();
+            if (GameEngine.checkGameEnd(this.state.nodes)) {
+              Toastr.makeToast("Wow. You really did it! Congratulation..");
+            }
           },
-          50
+          700
         );
+      } else {
+        Toastr.makeToast("Only two cards in one turn allowed..");
       }
     }
   }
