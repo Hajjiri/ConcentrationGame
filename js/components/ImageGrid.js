@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { View, Image, ScrollView, Dimensions } from "react-native";
+import { View, Image, ScrollView, Dimensions, Platform } from "react-native";
 import Orientation from "react-native-orientation";
 import { Toastr } from "@components/Toastr";
-
 import PropTypes from "prop-types";
 import _ from "lodash";
 import autobind from "autobind-decorator";
@@ -10,41 +9,100 @@ import Cell from "./Cell";
 
 var { height, width } = Dimensions.get("window");
 
-function getCellSquareSize(width, height, itemsToDivide) {
-  var sideToConsider = 0;
-  if (width <= height) sideToConsider = width;
-  else sideToConsider = height;
 
-  var retVal = (sideToConsider - itemsToDivide * 2) / itemsToDivide;
-  Toastr.makeToast(`Tile: ${retVal}`);
-  return retVal;
-}
 
 export default class ImageGrid extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tile_width: 0,
-      tile_height: 0
+      cell_width: 0,
+      cell_height: 0
     };
+    this.initial = "";
   }
 
-  componentDidMount() {
-    //Toastr.makeToast(`Height: ${height}, Width: ${width}`);
+  componentWillMount() {
+    this.initial = Orientation.getInitialOrientation();
+  }
+
+  getCellSquareSize(width, height, itemsToDivide) {
+  var sideToConsider = 0;
+  if (width <= height) sideToConsider = width;
+  else sideToConsider = height;
+
+  var retVal = (sideToConsider - itemsToDivide * 2) / itemsToDivide;  
+  return retVal;
+}
+  processForAndroid(width, height, orientationFrom, orientationTo) {
+    if (
+      (_.isEqual(orientationFrom, "") ||
+        typeof orientationFrom == "undefined") &&
+      _.isEqual(orientationTo, "LANDSCAPE")
+    ) {
+      return {
+        width: height,
+        height: width
+      };
+    } else if (
+      (_.isEqual(orientationFrom, "") ||
+        typeof orientationFrom == "undefined") &&
+      _.isEqual(orientationTo, "PORTRAIT")
+    ) {
+      return {
+        width: height,
+        height: width
+      };
+    } else if (
+      _.isEqual(orientationFrom, "LANDSCAPE") &&
+      _.isEqual(orientationTo, "PORTRAIT")
+    ) {
+      return {
+        width: height,
+        height: width
+      };
+    } else if (
+      _.isEqual(orientationFrom, "PORTRAIT") &&
+      _.isEqual(orientationTo, "LANDSCAPE")
+    ) {
+      return {
+        width: height,
+        height: width
+      };
+    } else
+      return {
+        width: width,
+        height: height
+      };
+  }
+
+  componentDidMount() {    
     Orientation.addOrientationListener(this._orientationDidChange);
-    this.calculateTileSize();
+    this.calculateCellSize();
   }
 
-  calculateTileSize()
-  {
-    var window = Dimensions.get("window");
+  calculateCellSize(orientation) {
+    const window = Platform.select({
+      ios: () => Dimensions.get("window"),
+      android: () => {
+        var currWindow = Dimensions.get("window");
+        return this.processForAndroid(
+          currWindow.width,
+          currWindow.height,
+          this.initial,
+          orientation
+        );
+      }
+    })();
+
+    this.initial = orientation;
+
     this.setState({
-      tile_width: getCellSquareSize(
+      cell_width: this.getCellSquareSize(
         window.width - 50,
         window.height - 150,
         this.props.rowSize
       ),
-      tile_height: getCellSquareSize(
+      cell_height: this.getCellSquareSize(
         window.width - 50,
         window.height - 150,
         this.props.rowSize
@@ -53,7 +111,7 @@ export default class ImageGrid extends Component {
   }
 
   _orientationDidChange = orientation => {
-    this.calculateTileSize();
+    this.calculateCellSize(orientation);
   };
 
   componentWillUnmount() {
@@ -72,8 +130,8 @@ export default class ImageGrid extends Component {
           return (
             <View key={j}>
               <Cell
-                cell_width={this.state.tile_width}
-                cell_height={this.state.tile_height}
+                cell_width={this.state.cell_width}
+                cell_height={this.state.cell_height}
                 cell={cell}
                 onPress={this.props.onCellSelected}
               />
