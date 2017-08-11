@@ -24,8 +24,8 @@ export default class Cell extends Component {
       >
         <Image
           style={{
-            width: 60,
-            height: 60,
+            width: this.props.cell_width,
+            height: this.props.cell_height,
             marginHorizontal: 1
           }}
           source={source}

@@ -1,12 +1,65 @@
 import React, { Component } from "react";
-import { View, Image, ScrollView } from "react-native";
+import { View, Image, ScrollView, Dimensions } from "react-native";
+import Orientation from "react-native-orientation";
+import { Toastr } from "@components/Toastr";
 
 import PropTypes from "prop-types";
 import _ from "lodash";
 import autobind from "autobind-decorator";
 import Cell from "./Cell";
 
+var { height, width } = Dimensions.get("window");
+
+function getCellSquareSize(width, height, itemsToDivide) {
+  var sideToConsider = 0;
+  if (width <= height) sideToConsider = width;
+  else sideToConsider = height;
+
+  var retVal = (sideToConsider - itemsToDivide * 2) / itemsToDivide;
+  Toastr.makeToast(`Tile: ${retVal}`);
+  return retVal;
+}
+
 export default class ImageGrid extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      tile_width: 0,
+      tile_height: 0
+    };
+  }
+
+  componentDidMount() {
+    //Toastr.makeToast(`Height: ${height}, Width: ${width}`);
+    Orientation.addOrientationListener(this._orientationDidChange);
+    this.calculateTileSize();
+  }
+
+  calculateTileSize()
+  {
+    var window = Dimensions.get("window");
+    this.setState({
+      tile_width: getCellSquareSize(
+        window.width - 50,
+        window.height - 150,
+        this.props.rowSize
+      ),
+      tile_height: getCellSquareSize(
+        window.width - 50,
+        window.height - 150,
+        this.props.rowSize
+      )
+    });
+  }
+
+  _orientationDidChange = orientation => {
+    this.calculateTileSize();
+  };
+
+  componentWillUnmount() {
+    Orientation.removeOrientationListener(this._orientationDidChange);
+  }
+
   renderRow(images, i) {
     return (
       <View
@@ -18,7 +71,9 @@ export default class ImageGrid extends Component {
         {images.map(function(cell, j) {
           return (
             <View key={j}>
-              <Cell                
+              <Cell
+                cell_width={this.state.tile_width}
+                cell_height={this.state.tile_height}
                 cell={cell}
                 onPress={this.props.onCellSelected}
               />
@@ -40,7 +95,13 @@ export default class ImageGrid extends Component {
       >
         {_.chunk(this.props.nodes, rowSize).map((rowImages, i) => {
           return (
-            <View style={{ height: 60, marginVertical: 1 }} key={i}>
+            <View
+              style={{
+                marginVertical: 1,
+                flex: 0.25
+              }}
+              key={i}
+            >
               {this.renderRow(rowImages, i)}
             </View>
           );
@@ -49,7 +110,7 @@ export default class ImageGrid extends Component {
     );
   }
 
-  render() {    
+  render() {
     return this.renderImages(this.props.rowSize);
   }
 }

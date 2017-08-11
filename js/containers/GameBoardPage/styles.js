@@ -10,7 +10,8 @@ export default StyleSheet.create({
     borderColor: "#9C8AA5"
   },
   content: {
-    alignItems: "center"
+    alignItems: "center",
+    height: 45
   },
   header: {
     textAlign: "center",
