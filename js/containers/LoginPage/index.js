@@ -8,6 +8,7 @@ import _ from 'lodash';
 import FBLogin from '@components/FBLogin'
 import { Toastr } from '@components/Toastr';
 import { resetStack } from '@app_init/NavigationActionsMethods';
+import { SCREEN } from '@config/custom_routes';
 
 import * as authenticationActions from '@actions/authenticationActions';
 const mapDispatchToProps = dispatch => ({
@@ -23,12 +24,15 @@ export default class LoginPage extends Component {
     });
 
     componentWillMount() {
-        let user = this.props.authenticationStore.user;        
+        let user = this.props.authenticationStore.user;
         if (!_.isEmpty(user)) {
-            resetStack(this.props.navigation, "HomePage", {
-                user: user
-            });
+            this.navigateToHomePage(user);
         }
+    }
+    navigateToHomePage(user) {        
+        resetStack(this.props.navigation, SCREEN.HOME, {
+            user: user
+        });
     }
 
     @autobind
@@ -38,12 +42,10 @@ export default class LoginPage extends Component {
         const user = {
             userId: userId,
             userAccessToken: token
-        }
+        }        
         this.props.authenticationActions.persistUserState(user);
         Toastr.makeToast("Logged in successfully.");
-        resetStack(this.props.navigation, "HomePage", {
-            user
-        });
+        this.navigateToHomePage(user);
     }
     @autobind
     OnLoginFailed(error) {
@@ -55,9 +57,9 @@ export default class LoginPage extends Component {
     }
     @autobind
     onLogout() {
-        this.props.authenticationActions.dropUserState();        
-        Toastr.makeToast("Logged out successfully.");        
-        resetStack(this.props.navigation, "LoginPage");
+        this.props.authenticationActions.dropUserState();
+        Toastr.makeToast("Logged out successfully.");
+        resetStack(this.props.navigation, SCREEN.LOGIN);
     }
 
     render() {
