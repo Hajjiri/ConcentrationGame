@@ -40,6 +40,9 @@ class FlickerConfig {
   getApiKey() {
     return GameSettings.flickr.API_KEY;
   }
+  getUserId() {
+    return GameSettings.flickr.USER_ID;
+  }
 }
 
 const EasyLevelSettings = new EasyLevelConfig();
