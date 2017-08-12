@@ -47,4 +47,9 @@ const HardLevelSettings = new HardLevelConfig();
 const DefaultValueSettings = new Defaults();
 const FlickerSettings = new FlickerConfig();
 
-export { EasyLevelSettings, HardLevelSettings, DefaultValueSettings, FlickerSettings };
+export {
+  EasyLevelSettings,
+  HardLevelSettings,
+  DefaultValueSettings,
+  FlickerSettings
+};

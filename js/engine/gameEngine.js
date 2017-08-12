@@ -66,7 +66,7 @@ export default class GameEngine {
   static checkGameEnd(nodes) {
     let availableMoves = nodes.filter(node => {
       return !node.isBurnt();
-    });    
+    });
     if (availableMoves.length > 0) {
       return false;
     }

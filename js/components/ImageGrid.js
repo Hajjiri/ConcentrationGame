@@ -9,8 +9,6 @@ import Cell from "./Cell";
 
 var { height, width } = Dimensions.get("window");
 
-
-
 export default class ImageGrid extends Component {
   constructor(props) {
     super(props);
@@ -26,13 +24,13 @@ export default class ImageGrid extends Component {
   }
 
   getCellSquareSize(width, height, itemsToDivide) {
-  var sideToConsider = 0;
-  if (width <= height) sideToConsider = width;
-  else sideToConsider = height;
+    var sideToConsider = 0;
+    if (width <= height) sideToConsider = width;
+    else sideToConsider = height;
 
-  var retVal = (sideToConsider - itemsToDivide * 2) / itemsToDivide;  
-  return retVal;
-}
+    var retVal = (sideToConsider - itemsToDivide * 2) / itemsToDivide;
+    return retVal;
+  }
   processForAndroid(width, height, orientationFrom, orientationTo) {
     if (
       (_.isEqual(orientationFrom, "") ||
@@ -75,7 +73,7 @@ export default class ImageGrid extends Component {
       };
   }
 
-  componentDidMount() {    
+  componentDidMount() {
     Orientation.addOrientationListener(this._orientationDidChange);
     this.calculateCellSize();
   }

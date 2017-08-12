@@ -5,7 +5,7 @@ const settings = {
     }
   },
   flickr: {
-    API_KEY: '027fdb30ea1a7ef76e0420eaab5042b1'
+    API_KEY: "027fdb30ea1a7ef76e0420eaab5042b1"
   },
   easyDifficulty: {
     sideSize: 2,

@@ -7,7 +7,7 @@ import GameEngine from "@game_engine/gameEngine";
 import Button from "@components/Button";
 import { Toastr } from "@components/Toastr";
 import ImageGrid from "@components/ImageGrid";
-import { SCREEN } from '@config/custom_routes';
+import { SCREEN } from "@config/custom_routes";
 import moment from "moment";
 
 export default class GameBoardPage extends Component {
