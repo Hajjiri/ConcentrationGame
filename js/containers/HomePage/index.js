@@ -8,6 +8,7 @@ import FBLogin from '@components/FBLogin'
 import { Toastr } from '@components/Toastr';
 import Button from '@components/Button';
 import { resetStack } from '@app_init/NavigationActionsMethods';
+import { SCREEN } from '@config/custom_routes';
 
 import * as authenticationActions from '@actions/authenticationActions';
 const mapDispatchToProps = dispatch => ({
@@ -24,7 +25,7 @@ export default class HomePage extends Component {
 
     @autobind
     newGame() {
-        this.props.navigation.navigate('GameBoardPage', {
+        this.props.navigation.navigate(SCREEN.GAMEBOARD, {
             user: {
                 userId: this.props.navigation.state.params.user.userId
             }
@@ -34,7 +35,7 @@ export default class HomePage extends Component {
     onLogout() {
         this.props.authenticationActions.dropUserState();
         Toastr.makeToast("Logged out successfully.");
-        resetStack(this.props.navigation, "LoginPage");
+        resetStack(this.props.navigation, SCREEN.LOGIN);
     }
 
     render() {

@@ -7,6 +7,7 @@ import GameEngine from "@game_engine/gameEngine";
 import Button from "@components/Button";
 import { Toastr } from "@components/Toastr";
 import ImageGrid from "@components/ImageGrid";
+import { SCREEN } from '@config/custom_routes';
 import moment from "moment";
 
 export default class GameBoardPage extends Component {
@@ -80,6 +81,15 @@ export default class GameBoardPage extends Component {
     } else {
       Toastr.makeToast("Wow. You really did it! Congratulation..");
     }
+    this.navigateToScorePage(secondsPassed);
+  }
+  navigateToScorePage(score) {
+    this.props.navigation.navigate(SCREEN.SCORE, {
+      user: {
+        userId: this.props.navigation.state.params.user.userId
+      },
+      score: score
+    });
   }
   initateGame() {
     GameEngine.unBlockNodes(this.state.nodes);
