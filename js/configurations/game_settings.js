@@ -4,6 +4,9 @@ const settings = {
       uri: "https://dummyimage.com/60x60/6b616b.png&text=+"
     }
   },
+  flickr: {
+    API_KEY: '027fdb30ea1a7ef76e0420eaab5042b1'
+  },
   easyDifficulty: {
     sideSize: 2,
     repetition: 2,
