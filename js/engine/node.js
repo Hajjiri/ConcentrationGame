@@ -30,7 +30,7 @@ export default class GameNode {
   flipNode() {
     this.tail = !this.tail;
   }
-  tailNode() {    
+  tailNode() {
     this.tail = true;
   }
   unTail() {

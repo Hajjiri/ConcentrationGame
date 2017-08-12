@@ -10,17 +10,14 @@ export default class Cell extends Component {
     if (
       (!this.props.cell.isHalted() && this.props.cell.isBurnt()) ||
       (!this.props.cell.isHalted() && this.props.cell.isHead())
-    ) {      
+    ) {
       source = this.props.cell.imageUrl;
     } else if (this.props.cell.isHalted() || this.props.cell.isTail()) {
       source = DefaultValueSettings.getThumbnailUrl();
     }
     return (
       <TouchableOpacity
-        onPress={this.props.onPress.bind(
-          this,
-          this.props.cell
-        )}
+        onPress={this.props.onPress.bind(this, this.props.cell)}
       >
         <Image
           style={{
