@@ -36,8 +36,15 @@ class Defaults {
   }
 }
 
+class FlickerConfig {
+  getApiKey() {
+    return GameSettings.flickr.API_KEY;
+  }
+}
+
 const EasyLevelSettings = new EasyLevelConfig();
 const HardLevelSettings = new HardLevelConfig();
 const DefaultValueSettings = new Defaults();
+const FlickerSettings = new FlickerConfig();
 
-export { EasyLevelSettings, HardLevelSettings, DefaultValueSettings };
+export { EasyLevelSettings, HardLevelSettings, DefaultValueSettings, FlickerSettings };
