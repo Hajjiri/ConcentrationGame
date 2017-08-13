@@ -1,18 +1,17 @@
 import { EasyLevelSettings, HardLevelSettings } from "@accessors/settings";
 import GameNode from "./node";
+import _ from "lodash";
 
 export default class GameEngine {
   // games assets initializing
-  static determineDifficulty(difficulty) {
-    if (difficulty === EasyLevelSettings.getLevelName()) {
-      return this.startNewGame(EasyLevelSettings);
-    } else {
-      return this.startNewGame(HardLevelSettings);
-    }
+  static determineDifficulty(difficulty, images) {
+    return this.startNewGame(HardLevelSettings, images);
   }
-  static startNewGame(LevelBasedSettings) {
+  static startNewGame(LevelBasedSettings, images) {
     let repetition = LevelBasedSettings.getRepetitionNumber();
-    let images = LevelBasedSettings.getImages();
+    if (images.length < LevelBasedSettings.getSideSize()) {
+      images = LevelBasedSettings.getImages(); // if images are not retrieved from flickr api successfully or number of images is less than required, get default images
+    }
     let shuffledImages = this.prepareArray(images, repetition);
     let nodes = this.convertArrayToNodes(shuffledImages);
     let game = {
