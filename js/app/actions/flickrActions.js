@@ -4,7 +4,6 @@ export function fetchImages() {
   return {
     type: FETCH_IMAGES,
     payload: getImages().then(images => {
-      console.log(images.stat);
       if (images.stat === "ok") {
         return images.photos.photo.map(image => {
           return formImageUrl(image);
@@ -29,5 +28,7 @@ function getImages() {
 }
 
 function formImageUrl(image) {
-  return `https://farm${image.farm}.staticflickr.com/${image.server}/${image.id}_${image.secret}.jpg`;
+  return {
+    uri: `https://farm${image.farm}.staticflickr.com/${image.server}/${image.id}_${image.secret}.jpg`
+  };
 }

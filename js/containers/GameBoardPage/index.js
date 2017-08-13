@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import { View, TouchableOpacity, Text, ScrollView } from "react-native";
 import autobind from "autobind-decorator";
 const timer = require("react-native-timer");
+import Spinner from "react-native-loading-spinner-overlay";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+
 import _ from "lodash";
 import GameEngine from "@game_engine/gameEngine";
 import Button from "@components/Button";
@@ -10,6 +14,14 @@ import ImageGrid from "@components/ImageGrid";
 import { SCREEN } from "@config/custom_routes";
 import moment from "moment";
 
+import * as flickrActions from "@actions/flickrActions";
+const mapDispatchToProps = dispatch => ({
+  flickrActions: bindActionCreators(flickrActions, dispatch)
+});
+const mapStateToProps = store => ({
+  flickrImagesStore: store.imagesStore
+});
+@connect(mapStateToProps, mapDispatchToProps)
 export default class GameBoardPage extends Component {
   static navigationOptions = ({ navigation, screenProps }) => ({
     title: "Concentration game challenges you!"
@@ -20,20 +32,47 @@ export default class GameBoardPage extends Component {
       nodes: [],
       difficulty: "hard",
       started: false,
-      startedAt: null
+      startedAt: null,
+      imagesFetched: false,
+      imagesError: null
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    var prevImagesState = this.props.flickrImagesStore;
+    var newImagesState = nextProps.flickrImagesStore;
+    if (
+      prevImagesState.fetched !== newImagesState.fetched &&
+      newImagesState.fetched === true
+    ) {
+      this.setState({
+        imagesFetched: true,
+        nodes: GameEngine.determineDifficulty(
+          this.state.difficulty,
+          newImagesState.images
+        ).nodes
+      });
+    } else if (
+      prevImagesState.imagesError !== newImagesState.imagesError &&
+      newImagesState.imagesError != null
+    ) {
+      this.setState({
+        imagesError: newImagesState.imagesError,
+        nodes: GameEngine.determineDifficulty(this.state.difficulty, []).nodes
+      });
+    }
+  }
   componentWillMount() {
-    this.setState({
-      nodes: GameEngine.determineDifficulty(this.state.difficulty).nodes
-    });
+    this.props.flickrActions.fetchImages();
   }
   componentWillUnmount() {
     timer.clearTimeout(this);
   }
   updateBoardUI() {
     this.setState({});
+  }
+  getFlickImages() {
+    return this.props.flickrImagesStore.images;
   }
 
   @autobind
@@ -99,11 +138,22 @@ export default class GameBoardPage extends Component {
     });
   }
   restartGame() {
-    this.setState({
-      started: false,
-      startedAt: null,
-      nodes: GameEngine.determineDifficulty(this.state.difficulty).nodes
-    });
+    if (this.state.imagesFetched === true) {
+      this.setState({
+        started: false,
+        startedAt: null,
+        nodes: GameEngine.determineDifficulty(
+          this.state.difficulty,
+          this.getFlickImages()
+        ).nodes
+      });
+    } else {
+      this.setState({
+        started: false,
+        startedAt: null,
+        nodes: GameEngine.determineDifficulty(this.state.difficulty, []).nodes
+      });
+    }
   }
   calculateScore(endStamp) {
     if (!_.isEmpty(this.state.startedAt) && !_.isEmpty(endStamp)) {
@@ -114,7 +164,7 @@ export default class GameBoardPage extends Component {
     return null;
   }
 
-  render() {
+  renderGameBoard() {
     let startButton = "Start";
     if (this.state.started) {
       startButton = "Restart";
@@ -134,6 +184,26 @@ export default class GameBoardPage extends Component {
         </ScrollView>
       </View>
     );
+  }
+  renderLoading() {
+    return (
+      <View style={{ flex: 1 }}>
+        <Spinner
+          visible={true}
+          textContent={"Loading game data. Please wait..."}
+          textStyle={{ color: "#421C52" }}
+          color={"#421C52"}
+          overlayColor={"rgba(0, 0, 0, 0.25)"}
+          // cancelable={true}
+        />
+      </View>
+    );
+  }
+  render() {
+    var view = this.state.imagesFetched
+      ? this.renderGameBoard()
+      : this.renderLoading();
+    return view;
   }
 }
 

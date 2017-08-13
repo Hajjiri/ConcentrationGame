@@ -3,7 +3,8 @@ import * as flickrActions from "@actions/flickrActions";
 export default function reducer(
   state = {
     images: {},
-    imagesError: null
+    imagesError: null,
+    fetched: false
   },
   action
 ) {
@@ -12,21 +13,24 @@ export default function reducer(
       return {
         ...state,
         images: null,
-        imagesError: null
+        imagesError: null,
+        fetched: false
       };
     }
     case flickrActions.FETCH_IMAGES + "_FULFILLED": {
       return {
         ...state,
         images: action.payload,
-        imagesError: null
+        imagesError: null,
+        fetched: true
       };
     }
     case flickrActions.FETCH_IMAGES + "_REJECTED": {
       return {
         ...state,
         images: null,
-        imagesError: action.payload
+        imagesError: action.payload,
+        fetched: false
       };
     }
   }
