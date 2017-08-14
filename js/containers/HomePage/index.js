@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, Image } from "react-native";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
@@ -43,8 +43,22 @@ export default class HomePage extends Component {
       <View style={styles.container}>
         <ScrollView justifyContent="center">
           <View style={styles.content}>
+            <Image
+              style={styles.userImage}
+              source={{
+                uri: this.props.navigation.state.params.user.userImage
+              }}
+            />
+            <Text style={styles.header}>
+              Welcome, {this.props.navigation.state.params.user.userName}
+            </Text>
+          </View>
+          <View style={styles.content}>
             <Text style={styles.header}>Try it. Don't get too addicted!</Text>
-            <Button button_text={"Play"} onPress={this.newGame} />
+            <Button
+              button_text={"Play"}
+              onPress={this.newGame}              
+            />
           </View>
         </ScrollView>
 
