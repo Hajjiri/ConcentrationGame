@@ -12,6 +12,11 @@ export default StyleSheet.create({
   content: {
     alignItems: "center"
   },
+  userImage: {
+    width: 60,
+    height: 60,
+    margin: 10
+  },
   header: {
     textAlign: "center",
     margin: 10,
