@@ -39,9 +39,13 @@ export default class LoginPage extends Component {
   OnLoginSucceed(fbResponseData) {
     const token = fbResponseData.accessToken.toString();
     const userId = fbResponseData.userID.toString();
+    const userName = fbResponseData.userName;
+    const userImage = fbResponseData.userImage;
     const user = {
       userId: userId,
-      userAccessToken: token
+      userAccessToken: token,
+      userName: userName,
+      userImage: userImage
     };
     this.props.authenticationActions.persistUserState(user);
     Toastr.makeToast("Logged in successfully.");
