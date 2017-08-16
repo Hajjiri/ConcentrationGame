@@ -31,46 +31,15 @@ export default class ImageGrid extends Component {
     var retVal = (sideToConsider - itemsToDivide * 2) / itemsToDivide;
     return retVal;
   }
-  processForAndroid(width, height, orientationFrom, orientationTo) {
-    if (
-      (_.isEqual(orientationFrom, "") ||
-        typeof orientationFrom == "undefined") &&
-      _.isEqual(orientationTo, "LANDSCAPE")
-    ) {
-      return {
-        width: height,
-        height: width
-      };
-    } else if (
-      (_.isEqual(orientationFrom, "") ||
-        typeof orientationFrom == "undefined") &&
-      _.isEqual(orientationTo, "PORTRAIT")
-    ) {
-      return {
-        width: height,
-        height: width
-      };
-    } else if (
-      _.isEqual(orientationFrom, "LANDSCAPE") &&
-      _.isEqual(orientationTo, "PORTRAIT")
-    ) {
-      return {
-        width: height,
-        height: width
-      };
-    } else if (
-      _.isEqual(orientationFrom, "PORTRAIT") &&
-      _.isEqual(orientationTo, "LANDSCAPE")
-    ) {
-      return {
-        width: height,
-        height: width
-      };
-    } else
-      return {
-        width: width,
-        height: height
-      };
+
+  processForAndroid(width, height, orientationTo) {
+    const min = Math.min(height, width);
+    const max = Math.max(height, width);
+    const isLandscape = orientationTo === "LANDSCAPE";
+    return {
+      width: isLandscape ? max : min,
+      height: isLandscape ? min : max
+    };    
   }
 
   componentDidMount() {
@@ -86,12 +55,10 @@ export default class ImageGrid extends Component {
         return this.processForAndroid(
           currWindow.width,
           currWindow.height,
-          this.initial,
           orientation
         );
       }
     })();
-
     this.initial = orientation;
 
     this.setState({
