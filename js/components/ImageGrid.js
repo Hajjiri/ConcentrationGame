@@ -31,6 +31,7 @@ export default class ImageGrid extends Component {
     var retVal = (sideToConsider - itemsToDivide * 2) / itemsToDivide;
     return retVal;
   }
+
   processForAndroid(width, height, orientationTo) {
     const min = Math.min(height, width);
     const max = Math.max(height, width);
