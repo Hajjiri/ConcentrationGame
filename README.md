@@ -34,11 +34,3 @@ npm install
 React Native | A framework for building native apps using React
 - [Redux](http://redux.js.org/, "Redux is a predictable state container for JavaScript apps.")
  Redux is a predictable state container for JavaScript apps.
-
-
- ### Todos List
- - add dependencies list to README.
- - game algorithm.
- - game UI.
- - images manager.
- - maybe more?
